@@ -1,0 +1,7 @@
+[
+  { "name": "Amit Shah", "groups": ["Haldi", "Reception", "Mehendi"] },
+  { "name": "Priya Patel", "groups": ["Reception"] },
+  { "name": "Rahul Verma", "groups": ["Haldi", "Sangeet"] },
+  { "name": "Sneha Iyer", "groups": ["Sangeet", "Reception"] },
+  { "name": "John Doe", "groups": ["Reception"] }
+]
