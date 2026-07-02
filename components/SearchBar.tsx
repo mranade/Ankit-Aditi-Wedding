@@ -22,112 +22,131 @@ export default function SearchBar() {
     load();
   }, []);
 
-  const filtered = data.filter((p) =>
-    p.name.toLowerCase().includes(query.toLowerCase())
-  );
+  const filtered =
+    query.trim().length > 0
+      ? data.filter((p) =>
+          p.name.toLowerCase().includes(query.toLowerCase())
+        )
+      : [];
 
   return (
-  <div>
-    {/* 👇 DETAIL VIEW */}
-    {selectedPerson ? (
-      <div style={{ padding: 20 }}>
-        <button
-          onClick={() => setSelectedPerson(null)}
-          style={{
-            marginBottom: 20,
-            padding: "8px 12px",
-            borderRadius: 8,
-            border: "1px solid #ddd",
-            background: "white",
-            cursor: "pointer",
-          }}
-        >
-          ← Search again
-        </button>
+    <div>
+      {/* 👇 DETAIL VIEW */}
+      {selectedPerson ? (
+        <div style={{ padding: 20 }}>
+          <button
+            onClick={() => setSelectedPerson(null)}
+            style={{
+              marginBottom: 20,
+              padding: "8px 12px",
+              borderRadius: 8,
+              border: "1px solid #ddd",
+              background: "white",
+              cursor: "pointer",
+            }}
+          >
+            ← Search again
+          </button>
 
-        <h2 style={{ fontSize: 34, marginBottom: 20 }}>
-          {selectedPerson.name}
-        </h2>
+          <h2 style={{ fontSize: 34, marginBottom: 20 }}>
+            {selectedPerson.name}
+          </h2>
 
-        <div
-          style={{
-            background: "#faf7f2",
-            padding: 20,
-            borderRadius: 16,
-          }}
-        >
-          <h3 style={{ marginBottom: 12, letterSpacing: 1 }}>
-            YOUR PHOTO GROUPS
-          </h3>
+          <div
+            style={{
+              background: "#faf7f2",
+              padding: 20,
+              borderRadius: 16,
+            }}
+          >
+            <h3 style={{ marginBottom: 12, letterSpacing: 1 }}>
+              YOUR PHOTO GROUPS
+            </h3>
 
-          <ul style={{ paddingLeft: 0, fontSize: 20, lineHeight: 2, listStyle: "none" }}>
-  {selectedPerson.groups.map((g, i) => (
-    <li key={i}>{g}</li>
-  ))}
-</ul>
-        </div>
-      </div>
-    ) : (
-      <>
-        {/* 👇 SEARCH VIEW */}
-        <input
-          placeholder="Type your name..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          style={{
-            width: "100%",
-            padding: 12,
-            borderRadius: 8,
-            border: "1px solid #ccc",
-            marginTop: 20,
-          }}
-        />
-
-        <div style={{ marginTop: 20 }}>
-          {filtered.map((person, idx) => (
-            <div
-              key={idx}
-              onClick={() => setSelectedPerson(person)} // 🔥 THIS IS THE MISSING PIECE
+            <ul
               style={{
-                background: "#fff7ed",
-                padding: 16,
-                borderRadius: 10,
-                marginBottom: 10,
-                cursor: "pointer",
+                paddingLeft: 0,
+                fontSize: 20,
+                lineHeight: 2,
+                listStyle: "none",
               }}
             >
-              <div style={{ fontWeight: "bold", fontSize: 18 }}>
-                {person.name}
-              </div>
-
-              <div style={{ marginTop: 10 }}>
-                {person.groups?.length > 0 ? (
-                  person.groups.map((g, i) => (
-                    <span
-                      key={i}
-                      style={{
-                        display: "inline-block",
-                        marginRight: 8,
-                        marginTop: 8,
-                        padding: "8px 12px",
-                        background: "#e0f2fe",
-                        borderRadius: 10,
-                        fontSize: 18,
-                        fontWeight: 500,
-                      }}
-                    >
-                      {g}
-                    </span>
-                  ))
-                ) : (
-                  <span style={{ color: "#888" }}>No groups</span>
-                )}
-              </div>
-            </div>
-          ))}
+              {selectedPerson.groups.map((g, i) => (
+                <li key={i}>{g}</li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </>
-    )}
-  </div>
-);
+      ) : (
+        <>
+          {/* 👇 SEARCH INPUT */}
+          <input
+            placeholder="Type your name..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            style={{
+              width: "100%",
+              padding: 12,
+              borderRadius: 8,
+              border: "1px solid #ccc",
+              marginTop: 20,
+            }}
+          />
+
+          {/* 👇 RESULTS (ONLY WHEN TYPING) */}
+          {query.trim().length > 0 && (
+            <div style={{ marginTop: 20 }}>
+              {filtered.length > 0 ? (
+                filtered.map((person, idx) => (
+                  <div
+                    key={idx}
+                    onClick={() => setSelectedPerson(person)}
+                    style={{
+                      background: "#fff7ed",
+                      padding: 16,
+                      borderRadius: 10,
+                      marginBottom: 10,
+                      cursor: "pointer",
+                    }}
+                  >
+                    <div style={{ fontWeight: "bold", fontSize: 18 }}>
+                      {person.name}
+                    </div>
+
+                    <div style={{ marginTop: 10 }}>
+                      {person.groups?.length > 0 ? (
+                        person.groups.map((g, i) => (
+                          <span
+                            key={i}
+                            style={{
+                              display: "inline-block",
+                              marginRight: 8,
+                              marginTop: 8,
+                              padding: "8px 12px",
+                              background: "#e0f2fe",
+                              borderRadius: 10,
+                              fontSize: 18,
+                              fontWeight: 500,
+                            }}
+                          >
+                            {g}
+                          </span>
+                        ))
+                      ) : (
+                        <span style={{ color: "#888" }}>No groups</span>
+                      )}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div style={{ color: "#888", marginTop: 10 }}>
+                  No matches found
+                </div>
+              )}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
 }
